@@ -30,16 +30,15 @@ function RegisterPage(props) {
             email: Email,
             name: Name,
             password: Password,
-        }
+        };
         dispatch(registerUser(body))
-            .then(response => {
-                console.log(response.payload);
-                if(response.payload.registerSuccess) {
+            .then( res => {
+                if(res.payload.registerSuccess) {
                     props.history.push('/login');
                 } else {
-                    alert('Failed to sign up')
+                    alert('Failed to sign up');
                 }
-            })
+            });
     }
     return (
         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100vh'}}>

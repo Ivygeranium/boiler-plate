@@ -19,15 +19,15 @@ function LoginPage(props) {
         let body = {
             email: Email,
             password: Password
-        }
+        };
         dispatch(loginUser(body))
-            .then(response => {
-                if(response.payload.loginSuccess) {
+            .then( res => {
+                if(res.payload.loginSuccess) {
                     props.history.push('/');
                 } else {
-                    alert('Failed to sign in')
+                    alert('Failed to Signin');
                 }
-            })
+            });
     }
 
     return (
