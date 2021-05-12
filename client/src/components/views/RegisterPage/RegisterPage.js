@@ -1,37 +1,24 @@
-import React ,{ useState } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { registerUser } from '../../../_actions/user_action';
+import { Form, Input, Button, Checkbox } from 'antd';
+
+const layout = {
+    labelCol: { span: 10 },
+    wrapperCol: { span: 24 },
+};
+const tailLayout = {
+    wrapperCol: { offset: 8, span: 16 },
+};
 
 function RegisterPage(props) {
     const dispatch = useDispatch();
 
-    const [Email, setEmail] = useState("");
-    const [Name, setName] = useState("");
-    const [Password, setPassword] = useState("");
-    const [ConfirmPassword, setConfirmPassword] = useState("");
+    const onSubmitLogin = (values) => {
 
-    const onChangeEmail = (event) => {
-        setEmail(event.currentTarget.value);
-    }
-    const onChangeName = (event) => {
-        setName(event.currentTarget.value);
-    }
-    const onChangePassword = (event) => {
-        setPassword(event.currentTarget.value);
-    }
-    const onChangeConfirmPassword = (event) => {
-        setConfirmPassword(event.currentTarget.value);
-    }
-    const onSubmitLogin = (event) => {
-        event.preventDefault();
+        if(values.password !== values.confirmPassword) return alert("Password must be the same"); 
 
-        if(Password !== ConfirmPassword) return alert("Password must be the same"); 
-        let body = {
-            email: Email,
-            name: Name,
-            password: Password,
-        };
-        dispatch(registerUser(body))
+        dispatch(registerUser(values))
             .then( res => {
                 if(res.payload.registerSuccess) {
                     props.history.push('/login');
@@ -42,18 +29,51 @@ function RegisterPage(props) {
     }
     return (
         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100vh'}}>
-            <form style={{display: 'flex', flexDirection: 'column'}} onSubmit={onSubmitLogin}>
-                <label>Email</label>
-                <input type="email" value={Email} onChange={onChangeEmail} />
-                <label>Name</label>
-                <input type="text" value={Name} onChange={onChangeName} />
-                <label>Password</label>
-                <input type="Password" value={Password} onChange={onChangePassword} />
-                <label>Confirm Password</label>
-                <input type="Password" value={ConfirmPassword} onChange={onChangeConfirmPassword} />
-                <br/>
-                <button type="submit">Register</button>
-            </form>
+            <Form
+                {...layout}
+                name="basic"
+                initialValues={{ remember: true }}
+                onFinish={onSubmitLogin}
+            >
+                <Form.Item
+                    label="Name"
+                    name="name"
+                    rules={[{ required: true, message: 'Please input your password!' }]}
+                >
+                    <Input />
+                </Form.Item>
+                <Form.Item
+                    label="Email"
+                    name="email"
+                    rules={[{ required: true, type: 'email', message: 'Not a valid Email' }]}
+                >
+                    <Input />
+                </Form.Item>
+
+                <Form.Item
+                    label="Password"
+                    name="password"
+                    rules={[{ required: true, message: 'Please input your password!' }]}
+                >
+                    <Input.Password />
+                </Form.Item>
+                
+                <Form.Item
+                    label="Confirm Password"
+                    name="confirmPassword"
+                    rules={[{ required: true, message: 'Please input your password!' }]}
+                >
+                    <Input.Password />
+                </Form.Item>
+
+                <Form.Item {...tailLayout} name="remember" valuePropName="checked">
+                    <Checkbox>Remember me</Checkbox>
+                </Form.Item>
+
+                <Form.Item {...tailLayout}>
+                    <Button type="primary" htmlType="submit">Submit</Button>
+                </Form.Item>
+            </Form>
         </div>
     )
 }

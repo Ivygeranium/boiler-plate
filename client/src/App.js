@@ -1,10 +1,13 @@
 import './App.css';
 
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
-// import NavBar from './components/views/NavBar/NavBar';
+import NavBar from './components/views/NavBar/NavBar';
 import LandingPage from './components/views/LandingPage/LandingPage';
-// import Footer from './components/views/Footer/Footer';
+import ProgramingPage from './components/views/LandingPage/ProgramingPage';
+import CreatePage from './components/views/LandingPage/Sections/CreatePage';
+import BlogPage from './components/views/LandingPage/BlogPage';
+import Footer from './components/views/Footer/Footer';
 
 import RegisterPage from './components/views/RegisterPage/RegisterPage';
 import LoginPage from './components/views/LoginPage/LoginPage';
@@ -12,17 +15,21 @@ import LoginPage from './components/views/LoginPage/LoginPage';
 import Auth from './hoc/auth';
 
 
+
 function App() {
   return (
-    <div className="App">
-      <Router>
-          <Switch>
-            <Route exact path="/" component={Auth(LandingPage, null)} />
-            <Route exact path="/login"component={Auth(LoginPage, false)} />
-            <Route exact path="/register"component={Auth(RegisterPage, false)} />
-          </Switch>
-      </Router>
-    </div>
+    <>
+      <NavBar/>
+      <Switch>
+        <Route exact path="/" component={Auth(LandingPage, null)} />
+        <Route exact path="/login"component={Auth(LoginPage, false)} />
+        <Route exact path="/register"component={Auth(RegisterPage, false)} />
+        <Route exact path="/Programing/Create"component={Auth(CreatePage, true, 1)} />
+        <Route path="/Programing/:Topics"component={Auth(ProgramingPage, true, 1)} />
+        <Route path="/blog"component={Auth(BlogPage, null)} />
+      </Switch>
+      <Footer/>
+    </>
   );
 }
 

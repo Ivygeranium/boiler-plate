@@ -3,9 +3,11 @@ const app = express();
 const port = 5000;
 
 const cookieParser = require('cookie-parser');
+const multer = require('multer');
 
 const config = require('./config/key');
 const { User } = require("./models/User");
+const { Blog } = require("./models/blog");
 const { auth } = require("./middleware/auth");
 
 app.use(express.urlencoded({extended: true})); // application/x-www-form-urlencoded
@@ -24,7 +26,7 @@ mongoose.connect(config.mongoURI, {
 
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('Server ON!')
 })
 
 app.post('/api/users/register', (req, res) => {
@@ -77,6 +79,64 @@ app.get('/api/users/logout', auth, (req, res) => {
     })
   })
 })
+
+let storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+      cb(null, `${Date.now()}_${file.originalname}`);
+  },
+  fileFilter: (req, file, cb) => {
+      const ext = path.extname(file.originalname)
+      if (ext !== '.jpg' && ext !== '.png' && ext !== '.mp4') {
+          return cb(res.status(400).end('only jpg, png, mp4 is allowed'), false);
+      }
+      cb(null, true)
+  }
+});
+
+const upload = multer({ storage: storage }).single("file");
+
+app.post('/api/blog/createPost', (req, res) => {
+  const blog = new Blog(req.body)
+  blog.save((err, postInfo) => {
+    if (err) return res.json({ success: false, err})
+    return res.status(200).json({
+      success: true, postInfo
+    })
+  })
+})
+
+app.post("/api/blog/uploadfiles", (req, res) => {
+  upload(req, res, err => {
+      if (err) {
+          return res.json({ success: false, err });
+      }
+      return res.json({ success: true, url: res.req.file.path, fileName: res.req.file.filename });
+  });
+});
+
+app.get("/api/blog/getBlogs", (req, res) => {
+  Blog.find()
+    .populate('writer')
+    .exec((err, blogs) => {
+      if (err) return res.status(400).send(err)
+      res.status(200).json({ success: true, blogs })
+    })
+});
+
+app.post("/api/blog/getPost", (req, res) => {
+  console.log(req.body);
+
+  Blog.findOne({ title: req.body.title })
+    .populate('writer')
+    .exec((err, post) => {
+      if(err) return res.status(400).send(err);
+      res.status(200).json({ success: true, post })
+    })
+});
+
 
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`)
