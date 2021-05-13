@@ -221,7 +221,7 @@ class QuillEditor extends React.Component {
     }
 
     handleChange = (html) => {
-        // console.log('html', html)
+        console.log('html', html)
         // https://youtu.be/BbR-QCoKngE
         // https://www.youtube.com/embed/ZwKhufmMxko
         // https://tv.naver.com/v/9176888

@@ -18,7 +18,7 @@ function CreatePage(props) {
         setFiles(files)
     }
 
-    const onSubmit = ({title}) => {
+    const onSubmit = ({title, category}) => {
 
         setContent("");
 
@@ -27,6 +27,7 @@ function CreatePage(props) {
         }
 
         const postInfo = {
+            category: category,
             title: title,
             content: content,
             writer: user.userData._id
@@ -34,12 +35,11 @@ function CreatePage(props) {
 
         axios.post('/api/blog/createPost', postInfo)
             .then( res => {
-                console.log(res);
                 if (res) {
                     message.success('Post Created!');
 
                     setTimeout(() => {
-                        props.history.push('/Programing/Overview')
+                        props.history.push(`/Programing/${postInfo.title}`)
                     }, 2000);
                 }
             })
@@ -53,6 +53,15 @@ function CreatePage(props) {
             </div>
 
             <Form name="basic" onFinish={onSubmit}>
+
+                <Form.Item
+                label="Category"
+                name="category"
+                rules={[{ required: true, message: 'Please input Category!' }]}
+                >
+                    <Input />
+                </Form.Item>  
+
                 <Form.Item
                 label="Title"
                 name="title"

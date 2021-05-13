@@ -8,6 +8,7 @@ const multer = require('multer');
 const config = require('./config/key');
 const { User } = require("./models/User");
 const { Blog } = require("./models/blog");
+const { BlogCatergory } = require("./models/blogCategory");
 const { auth } = require("./middleware/auth");
 
 app.use(express.urlencoded({extended: true})); // application/x-www-form-urlencoded
@@ -127,13 +128,32 @@ app.get("/api/blog/getBlogs", (req, res) => {
 });
 
 app.post("/api/blog/getPost", (req, res) => {
-  console.log(req.body);
 
   Blog.findOne({ title: req.body.title })
     .populate('writer')
     .exec((err, post) => {
       if(err) return res.status(400).send(err);
       res.status(200).json({ success: true, post })
+    })
+});
+
+app.post('/api/blog/createBlogList', (req, res) => {
+  const blogCatergory = new BlogCatergory(req.body)
+  blogCatergory.save((err, listInfo) => {
+    if (err) return res.json({ success: false, err})
+    return res.status(200).json({
+      success: true, listInfo
+    })
+  })
+})
+
+app.get("/api/blog/getBlogList", (req, res) => {
+
+  BlogCatergory.find()
+    .populate('writer')
+    .exec((err, list) => {
+      if(err) return res.status(400).send(err);
+      res.status(200).json({ success: true, list })
     })
 });
 

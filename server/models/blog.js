@@ -2,11 +2,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const blogSchema = mongoose.Schema({
+    category: {
+        type:String
+    },
     title: {
         type:String
     },
     content: {
-        type:String,
+        type:String
     },
     writer: {
         type: Schema.Types.ObjectId,

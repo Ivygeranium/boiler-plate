@@ -14,13 +14,12 @@ function BlogPage() {
         axios.get('/api/blog/getBlogs')
             .then(response => {
                 if (response.data.success) {
-                    console.log(response.data.blogs)
                     setBlogs(response.data.blogs)
                 } else {
                     alert('Couldnt get blog`s lists')
                 }
             })
-    }, [])
+    })
 
     const renderCards = blogs.map((blog, index) => {
         return <Col key={index} lg={8} md={12} xs={24}>

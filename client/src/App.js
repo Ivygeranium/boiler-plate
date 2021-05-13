@@ -4,7 +4,7 @@ import { Switch, Route } from "react-router-dom";
 
 import NavBar from './components/views/NavBar/NavBar';
 import LandingPage from './components/views/LandingPage/LandingPage';
-import ProgramingPage from './components/views/LandingPage/ProgramingPage';
+import ProgramingPage from './components/views/ProgramingPage/ProgramingPage';
 import CreatePage from './components/views/LandingPage/Sections/CreatePage';
 import BlogPage from './components/views/LandingPage/BlogPage';
 import Footer from './components/views/Footer/Footer';
