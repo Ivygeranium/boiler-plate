@@ -1,15 +1,43 @@
-import React, { useState } from 'react';
-import { Typography, Button, Form, message, Input } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Button, Form, message, Input, Cascader} from 'antd';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import QuillEditor from '../../../Editor/Quill';
-const { Title } = Typography;
 
 function CreatePage(props) {
     const user = useSelector(state => state.user);
 
     const [content, setContent] = useState("")
     const [files, setFiles] = useState([])
+    const [blogList, setBlogList] = useState([])
+
+    const callBlogList = async () => {
+        const res = await fetch('/api/blog/getBloglist');
+        const body = await res.json();
+    
+        return body; 
+    }
+    const selector = () => {
+        var options = [];
+        var children = [];
+        blogList.map( list => {
+            list.subCategory.map( subCategory => {
+                children.push({
+                    value: subCategory,
+                    label: subCategory
+                })
+                return children
+            })
+            options.push({
+                value: list.category,
+                label: list.category,
+                children: children
+            })
+            children = [];
+            return options
+        })
+        return options
+    }
 
     const onEditorChange = (value) => {
         setContent(value)
@@ -18,16 +46,22 @@ function CreatePage(props) {
         setFiles(files)
     }
 
+
+    useEffect(() => {
+        callBlogList()
+            .then( res => setBlogList(res.list))
+            .catch( err => console.log(err))
+    }, [])
+
+
+
+
     const onSubmit = ({title, category}) => {
 
         setContent("");
 
-        if (user.userData && !user.userData.isAuth) {
-            return alert('Please Log in first');
-        }
-
         const postInfo = {
-            category: category,
+            category: category[1],
             title: title,
             content: content,
             writer: user.userData._id
@@ -47,19 +81,17 @@ function CreatePage(props) {
 
 
     return (
-        <div style={{ maxWidth: '700px', margin: '2rem auto' }}>
-            <div style={{ textAlign: 'center' }}>
-                <Title level={2} > Editor</Title>
-            </div>
+        <div style={{ maxWidth: '900px', margin: '2rem auto' }}>
+            <h1>Editor</h1>
 
-            <Form name="basic" onFinish={onSubmit}>
+            <Form name="CreatePage" onFinish={onSubmit}>
 
                 <Form.Item
                 label="Category"
                 name="category"
-                rules={[{ required: true, message: 'Please input Category!' }]}
+                rules={[{ required: true, message: 'Please select Category!' }]}
                 >
-                    <Input />
+                    <Cascader options={selector()} placeholder="Please select" />
                 </Form.Item>  
 
                 <Form.Item

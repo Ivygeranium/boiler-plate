@@ -36,12 +36,21 @@ function RegisterPage(props) {
                 onFinish={onSubmitLogin}
             >
                 <Form.Item
-                    label="Name"
-                    name="name"
-                    rules={[{ required: true, message: 'Please input your password!' }]}
+                    label="LastName"
+                    name="lastname"
+                    rules={[{ required: true, message: 'Please input your LastName!' }]}
                 >
                     <Input />
                 </Form.Item>
+
+                <Form.Item
+                    label="Name"
+                    name="name"
+                    rules={[{ required: true, message: 'Please input your Name!' }]}
+                >
+                    <Input />
+                </Form.Item>
+
                 <Form.Item
                     label="Email"
                     name="email"

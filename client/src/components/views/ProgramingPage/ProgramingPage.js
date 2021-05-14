@@ -1,17 +1,18 @@
 import React from 'react';
 import SideMenu from './SideMenu';
 import Contents from './Contents';
+import Option from './Option';
 
 function ProgramingPage(props) {
 
     return (
-        <div>
-            <div className="Content">
-                <SideMenu {...props} /> 
-                <Contents />
-                <div className="right"></div>
-            </div>
+
+        <div className="Content">
+            <SideMenu {...props} /> 
+            <Contents />
+            <Option /> 
         </div>
+
     )
 }
 

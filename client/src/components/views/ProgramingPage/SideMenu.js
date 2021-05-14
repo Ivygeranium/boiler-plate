@@ -34,7 +34,7 @@ function SideMenu(props) {
             onClick={(event) => {props.history.push(`/Programing/${event.key}`)}}
             style={{ width: '256px' }}
             defaultSelectedKeys={['Overview']}
-            // defaultOpenKeys={['AI', 'CS']}
+            defaultOpenKeys={['Web']}
             mode="inline"
         >   
             <Menu.Item key="Overview" icon={<HomeOutlined/>}>Overview</Menu.Item>

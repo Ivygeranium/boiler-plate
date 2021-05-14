@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 
-import { Empty, Typography } from 'antd';
+import { Empty } from 'antd';
 import { useParams } from 'react-router';
-
-const { Title } = Typography
-
 
 function Contents() {
     const [post, setPost] = useState([])
@@ -28,7 +25,7 @@ function Contents() {
     if(post) {
         return (
             <div className="postPage" style={{margin: '40px'}}>
-                <Title level={2}>{post.title}</Title>
+                <h1>{post.title}</h1>
                 <br />
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                     {post.createdAt}
